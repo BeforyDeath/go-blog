@@ -1,0 +1,11 @@
+{
+  "BasePath": "conf",
+  "Logger": {
+    "Debug": true,
+    "OutFile": false
+  },
+  "DataBase": {
+    "DriverName": "mysql",
+    "DataSourceName": "root:root@tcp(127.0.0.1:3306)/blog"
+  }
+}
