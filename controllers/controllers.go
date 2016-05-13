@@ -1,5 +1,5 @@
 package controllers
 
 type Controller struct {
-	Posts Posts
+    Posts Posts
 }
