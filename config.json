@@ -1,5 +1,5 @@
 {
-  "BasePath": "conf",
+  "BasePath": "/",
   "Logger": {
     "Debug": true,
     "OutFile": false
