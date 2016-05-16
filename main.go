@@ -13,6 +13,7 @@ import (
 
 func main() {
     core.Config.Init()
+    core.Themes.Init()
 
     core.Config.Logger.Init()
     if core.Config.Logger.OutFile {
@@ -26,6 +27,7 @@ func main() {
     controller := controllers.Controller{}
 
     router := httprouter.New()
-    router.GET("/", controller.Posts.Index)
+    router.GET("/", controller.Element.Index)
+    log.Info("Server started ...")
     log.Fatal(http.ListenAndServe(":8085", router))
 }

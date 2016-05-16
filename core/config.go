@@ -6,10 +6,11 @@ import (
     "os"
 )
 
-var Config Configuration
+var Config config
 
-type Configuration struct {
+type config struct {
     BasePath string
+    Theme    string
     Logger   Logger
     DataBase Database
 }
@@ -24,7 +25,7 @@ type Database struct {
     DataSourceName string
 }
 
-func (c *Configuration) Init() {
+func (c *config) Init() {
     file, err := os.Open("config.json")
     if err != nil {
         log.Fatal(err)

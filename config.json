@@ -1,5 +1,6 @@
 {
-  "BasePath": "/",
+  "BasePath": "",
+  "Theme": "default",
   "Logger": {
     "Debug": true,
     "OutFile": false
