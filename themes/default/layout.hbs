@@ -12,11 +12,3 @@
 </body>
 </html>
 {{ end }}
-
-{{ define "index" }}
-{{ template "header" }}
-    {{ range . }}
-        {{ .Name }}
-    {{ end }}
-{{ template "footer" }}
-{{ end }}

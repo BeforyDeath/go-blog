@@ -4,15 +4,18 @@ import (
     "encoding/json"
     log "github.com/Sirupsen/logrus"
     "os"
+    "path/filepath"
 )
 
 var Config config
 
 type config struct {
-    BasePath string
-    Theme    string
-    Logger   Logger
-    DataBase Database
+    BasePath       string
+    Theme          string
+    ThemePath      string
+    AdminThemePath string
+    Logger         Logger
+    DataBase       Database
 }
 
 type Logger struct {
@@ -37,4 +40,11 @@ func (c *config) Init() {
     if err != nil {
         log.Fatal(err)
     }
+
+    cwd, _ := os.Getwd()
+    if Config.BasePath != "" {
+        cwd = Config.BasePath
+    }
+    c.ThemePath = filepath.Join(cwd, "/themes/" + Config.Theme)
+    c.AdminThemePath = filepath.Join(cwd, "/themes/admin")
 }

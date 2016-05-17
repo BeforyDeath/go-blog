@@ -26,8 +26,16 @@ func main() {
 
     controller := controllers.Controller{}
 
+    controller.User.Name = []byte("admin")
+    controller.User.Password = []byte("password")
+
     router := httprouter.New()
-    router.GET("/", controller.Element.Index)
+
+    router.GET("/", controller.Element.List)
+    router.GET("/element/:alias", controller.Element.One)
+
+    router.GET("/admin/element/:id", controller.User.BasicAuth(controller.Element.Create))
+
     log.Info("Server started ...")
     log.Fatal(http.ListenAndServe(":8085", router))
 }
