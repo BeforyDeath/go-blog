@@ -1,5 +1,9 @@
 package models
 
+import (
+    "time"
+)
+
 type Elements struct {
 }
 
@@ -9,13 +13,22 @@ type element struct {
     Name        string
     Preview     string
     Description string
-    Creates_at  string
+    Created_at  time.Time
     Visible     bool
 }
 
-func (m *Elements) GetList() ([]*element, error) {
+func (m *Elements) GetByAlias(alias string) (*element, error) {
+    var e element
+    err := db.QueryRow("SELECT id, name, alias, description, created_at FROM element WHERE alias=? AND visible=?", alias, true).Scan(
+        &e.Id, &e.Name, &e.Alias, &e.Description, &e.Created_at)
+    if err != nil {
+        return nil, err
+    }
+    return &e, nil
+}
 
-    rows, err := db.Query("SELECT id, name FROM element")
+func (m *Elements) GetList() ([]*element, error) {
+    rows, err := db.Query("SELECT id, name, alias, preview, created_at FROM element WHERE visible=?", 1)
     if err != nil {
         return nil, err
     }
@@ -25,7 +38,7 @@ func (m *Elements) GetList() ([]*element, error) {
 
     for rows.Next() {
         e := new(element)
-        err := rows.Scan(&e.Id, &e.Name)
+        err := rows.Scan(&e.Id, &e.Name, &e.Alias, &e.Preview, &e.Created_at)
         if err != nil {
             return nil, err
         }

@@ -12,10 +12,17 @@ import (
 type ElementController struct {
 }
 
-func (e *ElementController) One(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-    //Elements := models.Elements{}
+func (e *ElementController) View(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+    element := models.Elements{}
+    res, err := element.GetByAlias(ps.ByName("alias"))
+    if err != nil {
+        http.Error(w, http.StatusText(404), 404)
+        return
+    }
+    // todo reparse template
+    core.Themes.Init()
 
-    err := core.Theme.ExecuteTemplate(w, "element", nil)
+    err = core.Theme.ExecuteTemplate(w, "element", res)
     if err != nil {
         log.Error(err.Error())
         return
@@ -28,6 +35,9 @@ func (e *ElementController) List(w http.ResponseWriter, r *http.Request, _ httpr
     if err != nil {
         http.Error(w, http.StatusText(500), 500)
     }
+    // todo reparse template
+    core.Themes.Init()
+
     err = core.Theme.ExecuteTemplate(w, "elementList", res)
     if err != nil {
         log.Error(err.Error())

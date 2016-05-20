@@ -1,13 +1,17 @@
 {{ define "elementList" }}
 {{ template "header" }}
-element list
-{{ . }}
+list
+    {{ range . }}
+        {{ . }}
+    {{ end }}
 {{ template "footer" }}
 {{ end }}
 
 {{ define "element" }}
 {{ template "header" }}
 element
-{{ . }}
+{{ .Name }}
+{{ .Created_at | formatTime}}
+
 {{ template "footer" }}
 {{ end }}

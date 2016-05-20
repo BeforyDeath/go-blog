@@ -7,6 +7,6 @@
   },
   "DataBase": {
     "DriverName": "mysql",
-    "DataSourceName": "root:root@tcp(127.0.0.1:3306)/blog"
+    "DataSourceName": "root:root@tcp(127.0.0.1:3306)/blog?parseTime=true"
   }
 }

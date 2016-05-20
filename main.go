@@ -32,9 +32,10 @@ func main() {
     router := httprouter.New()
 
     router.GET("/", controller.Element.List)
-    router.GET("/element/:alias", controller.Element.One)
+    router.GET("/element/:alias", controller.Element.View)
 
-    router.GET("/admin/element/:id", controller.User.BasicAuth(controller.Element.Create))
+    //router.GET("/admin/element/:id", controller.User.BasicAuth(controller.Element.Create))
+    router.GET("/admin/element/:id", controller.Element.Create)
 
     log.Info("Server started ...")
     log.Fatal(http.ListenAndServe(":8085", router))
