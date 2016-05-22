@@ -28,7 +28,7 @@ type Database struct {
     DataSourceName string
 }
 
-func (c *config) Init() {
+func (self *config) Init() {
     file, err := os.Open("config.json")
     if err != nil {
         log.Fatal(err)
@@ -36,7 +36,7 @@ func (c *config) Init() {
     defer file.Close()
 
     decoder := json.NewDecoder(file)
-    err = decoder.Decode(&c)
+    err = decoder.Decode(&self)
     if err != nil {
         log.Fatal(err)
     }
@@ -44,7 +44,9 @@ func (c *config) Init() {
     cwd, _ := os.Getwd()
     if Config.BasePath != "" {
         cwd = Config.BasePath
+    } else {
+        Config.BasePath = cwd
     }
-    c.ThemePath = filepath.Join(cwd, "/themes/" + Config.Theme)
-    c.AdminThemePath = filepath.Join(cwd, "/themes/admin")
+    self.ThemePath = filepath.Join(cwd, "/themes/" + Config.Theme)
+    self.AdminThemePath = filepath.Join(cwd, "/themes/admin")
 }

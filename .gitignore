@@ -1,5 +1,6 @@
 .idea
 source
+themes/assets/vendors
 
 core.log
 go-blog

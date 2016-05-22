@@ -4,10 +4,10 @@ import (
     "time"
 )
 
-type Elements struct {
+type Pages struct {
 }
 
-type element struct {
+type Page struct {
     Id          int
     Alias       string
     Name        string
@@ -17,8 +17,8 @@ type element struct {
     Visible     bool
 }
 
-func (m *Elements) GetByAlias(alias string) (*element, error) {
-    var e element
+func (self *Pages) GetByAlias(alias string) (*Page, error) {
+    var e Page
     err := db.QueryRow("SELECT id, name, alias, description, created_at FROM element WHERE alias=? AND visible=?", alias, true).Scan(
         &e.Id, &e.Name, &e.Alias, &e.Description, &e.Created_at)
     if err != nil {
@@ -27,17 +27,17 @@ func (m *Elements) GetByAlias(alias string) (*element, error) {
     return &e, nil
 }
 
-func (m *Elements) GetList() ([]*element, error) {
+func (self *Pages) GetList() ([]*Page, error) {
     rows, err := db.Query("SELECT id, name, alias, preview, created_at FROM element WHERE visible=?", 1)
     if err != nil {
         return nil, err
     }
     defer rows.Close()
 
-    result := make([]*element, 0)
+    result := make([]*Page, 0)
 
     for rows.Next() {
-        e := new(element)
+        e := new(Page)
         err := rows.Scan(&e.Id, &e.Name, &e.Alias, &e.Preview, &e.Created_at)
         if err != nil {
             return nil, err

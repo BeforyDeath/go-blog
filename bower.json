@@ -1,0 +1,6 @@
+{
+  "name": "go-blog",
+  "dependencies": {
+    "bootstrap": "^3.3.6"
+  }
+}

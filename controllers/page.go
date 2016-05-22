@@ -9,11 +9,11 @@ import (
     "html/template"
 )
 
-type ElementController struct {
+type PageController struct {
 }
 
-func (e *ElementController) View(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-    element := models.Elements{}
+func (self *PageController) View(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+    element := models.Pages{}
     res, err := element.GetByAlias(ps.ByName("alias"))
     if err != nil {
         http.Error(w, http.StatusText(404), 404)
@@ -29,8 +29,8 @@ func (e *ElementController) View(w http.ResponseWriter, r *http.Request, ps http
     }
 }
 
-func (e *ElementController) List(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-    Elements := models.Elements{}
+func (self *PageController) List(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+    Elements := models.Pages{}
     res, err := Elements.GetList()
     if err != nil {
         http.Error(w, http.StatusText(500), 500)
@@ -45,12 +45,26 @@ func (e *ElementController) List(w http.ResponseWriter, r *http.Request, _ httpr
     }
 }
 
-func (e *ElementController) Create(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func (self *PageController) Edit(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
-    tpl, err := template.ParseGlob(core.Config.AdminThemePath + "/*.hbs")
+    tpl, err := template.ParseGlob(core.Config.AdminThemePath + "/*.html")
     if err != nil {
         log.Error(err.Error())
         return
     }
     err = tpl.ExecuteTemplate(w, "elementForm", nil)
+}
+
+func (self *PageController) Create(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+
+    tpl, err := template.ParseGlob(core.Config.AdminThemePath + "/*.html")
+    if err != nil {
+        log.Error(err.Error())
+        return
+    }
+    err = tpl.ExecuteTemplate(w, "elementForm", nil)
+}
+
+func (self *PageController) Update(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+
 }

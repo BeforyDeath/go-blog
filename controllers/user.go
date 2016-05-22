@@ -13,7 +13,7 @@ type UserController struct {
     Password []byte
 }
 
-func (u *UserController) BasicAuth(h httprouter.Handle) httprouter.Handle {
+func (self *UserController) BasicAuth(h httprouter.Handle) httprouter.Handle {
     return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
         const basicAuthPrefix string = "Basic "
         auth := r.Header.Get("Authorization")
@@ -22,8 +22,8 @@ func (u *UserController) BasicAuth(h httprouter.Handle) httprouter.Handle {
             if err == nil {
                 pair := bytes.SplitN(payload, []byte(":"), 2)
                 if len(pair) == 2 &&
-                bytes.Equal(pair[0], u.Name) &&
-                bytes.Equal(pair[1], u.Password) {
+                bytes.Equal(pair[0], self.Name) &&
+                bytes.Equal(pair[1], self.Password) {
                     h(w, r, ps)
                     return
                 }

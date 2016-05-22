@@ -31,11 +31,18 @@ func main() {
 
     router := httprouter.New()
 
-    router.GET("/", controller.Element.List)
-    router.GET("/element/:alias", controller.Element.View)
+    router.ServeFiles("/vendor/*filepath", http.FileSystem(http.Dir(core.Config.BasePath + "/themes/assets/vendors/")))
+    router.ServeFiles("/assets/*filepath", http.FileSystem(http.Dir(core.Config.ThemePath + "/assets/")))
 
-    //router.GET("/admin/element/:id", controller.User.BasicAuth(controller.Element.Create))
-    router.GET("/admin/element/:id", controller.Element.Create)
+    //router.Handler("GET", "/vendor/*filepath", http.StripPrefix("/vendor/", http.FileServer(http.Dir(core.Config.BasePath + "/themes/assets/vendors/"))))
+    //router.Handler("GET", "/assets/*filepath", http.StripPrefix("/assets/", http.FileServer(http.Dir(core.Config.ThemePath + "/assets/"))))
+
+    router.GET("/", controller.Page.List)
+    router.GET("/page/:alias", controller.Page.View)
+
+    router.GET("/admin/page/edit/:id", controller.Page.Edit)
+    router.GET("/admin/page/create", controller.Page.Create)
+    router.POST("/admin/page/update/:id", controller.Page.Update)
 
     log.Info("Server started ...")
     log.Fatal(http.ListenAndServe(":8085", router))
