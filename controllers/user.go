@@ -1,15 +1,15 @@
 package controllers
 
 import (
+    "bytes"
+    "encoding/base64"
     "github.com/julienschmidt/httprouter"
     "net/http"
     "strings"
-    "encoding/base64"
-    "bytes"
 )
 
 type UserController struct {
-    Name []byte
+    Name     []byte
     Password []byte
 }
 

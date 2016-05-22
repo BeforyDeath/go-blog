@@ -6,16 +6,18 @@ import (
     "github.com/beforydeath/go-blog/models"
     "github.com/julienschmidt/httprouter"
     "net/http"
-    "html/template"
+    "strconv"
+    "time"
 )
 
 type PageController struct {
 }
 
 func (self *PageController) View(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-    element := models.Pages{}
-    res, err := element.GetByAlias(ps.ByName("alias"))
+    model := models.Pages{}
+    res, err := model.GetByAlias(ps.ByName("alias"))
     if err != nil {
+        log.Info(ps.ByName("alias") + ": " + err.Error())
         http.Error(w, http.StatusText(404), 404)
         return
     }
@@ -30,9 +32,10 @@ func (self *PageController) View(w http.ResponseWriter, r *http.Request, ps http
 }
 
 func (self *PageController) List(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-    Elements := models.Pages{}
-    res, err := Elements.GetList()
+    model := models.Pages{}
+    res, err := model.GetList()
     if err != nil {
+        log.Error(err.Error())
         http.Error(w, http.StatusText(500), 500)
     }
     // todo reparse template
@@ -45,24 +48,59 @@ func (self *PageController) List(w http.ResponseWriter, r *http.Request, _ httpr
     }
 }
 
-func (self *PageController) Edit(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func (self *PageController) Edit(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+    id, err := strconv.Atoi(ps.ByName("id"))
+    if err != nil {
+        log.Error(err.Error())
+        http.Error(w, http.StatusText(404), 404)
+        return
+    }
 
-    tpl, err := template.ParseGlob(core.Config.AdminThemePath + "/*.html")
+    model := models.Pages{}
+    res, err := model.GetById(id)
+    if err != nil {
+        log.Info(ps.ByName("id") + ": " + err.Error())
+        http.Error(w, http.StatusText(404), 404)
+        return
+    }
+
+    // todo reparse template
+    core.Themes.Init()
+
+    err = core.Theme.ExecuteTemplate(w, "elementForm", res)
     if err != nil {
         log.Error(err.Error())
         return
     }
-    err = tpl.ExecuteTemplate(w, "elementForm", nil)
 }
 
 func (self *PageController) Create(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+    page := new(models.Page)
 
-    tpl, err := template.ParseGlob(core.Config.AdminThemePath + "/*.html")
+    if ( r.Method == "POST") {
+        r.ParseForm()
+        err := decoder.Decode(page, r.PostForm)
+        if err != nil {
+            log.Error(err.Error())
+        }
+        page.Created_at = time.Now()
+
+        model := models.Pages{}
+        id, err := model.Create(page)
+        if err != nil {
+            log.Error(err.Error())
+        }
+        log.Infof("Create new id:%d", id)
+    }
+
+    // todo reparse template
+    core.Themes.Init()
+
+    err := core.Theme.ExecuteTemplate(w, "elementForm", page)
     if err != nil {
         log.Error(err.Error())
         return
     }
-    err = tpl.ExecuteTemplate(w, "elementForm", nil)
 }
 
 func (self *PageController) Update(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
