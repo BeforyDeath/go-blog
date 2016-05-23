@@ -1,36 +1,36 @@
 {{ define "elementList" }}
 {{ template "header" }}
-list
+
 {{ range . }}
-{{ . }}
+<div class="post">
+    <h3><a href="/page/{{ .Alias }}">{{ .Name }}</a></h3>
+    <div class="created_at">{{ .Created_at | formatTime }}</div>
+    <div class="preview">{{ .Preview | markdown }}</div>
+</div>
 {{ end }}
+
 {{ template "footer" }}
 {{ end }}
 
 {{ define "element" }}
 {{ template "header" }}
-element
-{{ .Name }}
-{{ .Created_at | formatTime}}
-
+<h1>{{ .Name }}</h1>
+<div class="created_at">{{ .Created_at | formatTime }}</div>
+<div class="description">{{ .Description | replace "{preview}" | markdown }}</div>
 {{ template "footer" }}
 {{ end }}
 
 {{ define "elementForm" }}
 {{ template "header" }}
 <div class="col-lg-6">
-    <form method="POST" action="{{ if .Id }}/admin/page/update/{{ .Id }}{{else}}/admin/page/create{{ end }}">
+    <form id="page">
         <div class="form-group">
             <label for="name">Name</label>
-            <input type="text" class="form-control" id="name" name="name" value="{{ .Name }}">
+            <input type="text" class="form-control" id="name" name="name" value="{{ .Name }}" required>
         </div>
         <div class="form-group">
             <label for="alias">Alias</label>
-            <input type="text" class="form-control" id="alias" name="alias" value="{{ .Alias }}">
-        </div>
-        <div class="form-group">
-            <label for="preview">Preview</label>
-            <textarea class="form-control" rows="4" id="preview" name="preview">{{ .Preview }}</textarea>
+            <input type="text" class="form-control" id="alias" name="alias" value="{{ .Alias }}" required>
         </div>
         <div class="form-group">
             <label for="description">Description</label>
@@ -40,10 +40,11 @@ element
             <label for="visible"></label>
             <input type="checkbox" id="visible" name="visible" {{ if .Visible }} checked{{ end }}> Visible
         </div>
+        <div class="error"></div>
+
         <div class="form-group">
             <input type="hidden" class="form-control" id="id" name="id" value="{{ .Id }}">
-            <button type="submit" class="btn btn-default">{{ if .Id }}Update{{else}}Create{{ end }}</button>
-
+            <button class="btn btn-default" id="submit">{{ if .Id }}Update{{else}}Create{{ end }}</button>
         </div>
     </form>
 </div>

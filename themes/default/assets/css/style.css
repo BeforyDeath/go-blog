@@ -38,3 +38,8 @@ body {
 .container .text-muted {
     margin: 20px 0;
 }
+
+.error {
+    padding: 10px;
+    color: #ff0000;
+}

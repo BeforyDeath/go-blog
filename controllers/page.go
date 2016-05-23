@@ -8,12 +8,13 @@ import (
     "net/http"
     "strconv"
     "time"
+    "fmt"
 )
 
 type PageController struct {
 }
 
-func (self *PageController) View(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (c *PageController) View(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
     model := models.Pages{}
     res, err := model.GetByAlias(ps.ByName("alias"))
     if err != nil {
@@ -31,7 +32,7 @@ func (self *PageController) View(w http.ResponseWriter, r *http.Request, ps http
     }
 }
 
-func (self *PageController) List(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func (c *PageController) List(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
     model := models.Pages{}
     res, err := model.GetList()
     if err != nil {
@@ -48,7 +49,7 @@ func (self *PageController) List(w http.ResponseWriter, r *http.Request, _ httpr
     }
 }
 
-func (self *PageController) Edit(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (c *PageController) Edit(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
     id, err := strconv.Atoi(ps.ByName("id"))
     if err != nil {
         log.Error(err.Error())
@@ -74,23 +75,29 @@ func (self *PageController) Edit(w http.ResponseWriter, r *http.Request, ps http
     }
 }
 
-func (self *PageController) Create(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func (c *PageController) Create(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
     page := new(models.Page)
 
     if ( r.Method == "POST") {
         r.ParseForm()
         err := decoder.Decode(page, r.PostForm)
         if err != nil {
-            log.Error(err.Error())
+            w.WriteHeader(400)
+            fmt.Fprint(w, err.Error())
+            return
         }
         page.Created_at = time.Now()
 
         model := models.Pages{}
         id, err := model.Create(page)
         if err != nil {
-            log.Error(err.Error())
+            w.WriteHeader(400)
+            fmt.Fprint(w, err.Error())
+            return
         }
-        log.Infof("Create new id:%d", id)
+        w.WriteHeader(201)
+        fmt.Fprint(w, id)
+        return
     }
 
     // todo reparse template
@@ -103,6 +110,6 @@ func (self *PageController) Create(w http.ResponseWriter, r *http.Request, _ htt
     }
 }
 
-func (self *PageController) Update(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func (c *PageController) Update(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 }
