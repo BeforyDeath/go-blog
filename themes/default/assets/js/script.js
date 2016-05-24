@@ -7,9 +7,9 @@ $("#page").submit(function (e) {
         success: function (data) {
 
             console.log(data);
-            
+
         },
-        error: function(data){
+        error: function (data) {
             $(".error").text(data.responseText);
         }
     });

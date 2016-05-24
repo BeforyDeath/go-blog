@@ -1,6 +1,7 @@
 {
   "BasePath": "",
   "Theme": "default",
+  "ThemeReload": true,
   "Logger": {
     "Debug": true,
     "OutFile": false

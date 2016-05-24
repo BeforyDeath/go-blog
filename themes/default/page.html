@@ -1,4 +1,4 @@
-{{ define "elementList" }}
+{{ define "pageList" }}
 {{ template "header" }}
 
 {{ range . }}
@@ -12,7 +12,7 @@
 {{ template "footer" }}
 {{ end }}
 
-{{ define "element" }}
+{{ define "page" }}
 {{ template "header" }}
 <h1>{{ .Name }}</h1>
 <div class="created_at">{{ .Created_at | formatTime }}</div>
@@ -20,7 +20,7 @@
 {{ template "footer" }}
 {{ end }}
 
-{{ define "elementForm" }}
+{{ define "pageForm" }}
 {{ template "header" }}
 <div class="col-lg-6">
     <form id="page">
