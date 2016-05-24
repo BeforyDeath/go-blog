@@ -8,11 +8,11 @@ import (
 )
 
 var Themes themes
+var Theme *template.Template
 
 type themes struct {
+	Result map[string]interface{}
 }
-
-var Theme *template.Template
 
 func (t *themes) Init() {
 	funcMap := template.FuncMap{
@@ -29,7 +29,17 @@ func (t *themes) Init() {
 			return template.HTML(blackfriday.MarkdownBasic([]byte(str)))
 		},
 	}
+
 	Theme = template.Must(template.New("main").Funcs(funcMap).ParseGlob(Config.ThemePath + "/*.html"))
+
+	t.InitResult()
+}
+
+func (t *themes) InitResult() {
+	if t.Result == nil {
+		t.Result = make(map[string]interface{})
+		t.Result["login"] = false
+	}
 }
 
 func (t *themes) Reload() {

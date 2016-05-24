@@ -6,6 +6,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"net/http"
 	"strings"
+	"github.com/beforydeath/go-blog/core"
 )
 
 type UserController struct {
@@ -22,13 +23,19 @@ func (c *UserController) BasicAuth(h httprouter.Handle) httprouter.Handle {
 			if err == nil {
 				pair := bytes.SplitN(payload, []byte(":"), 2)
 				if len(pair) == 2 &&
-					bytes.Equal(pair[0], c.Name) &&
-					bytes.Equal(pair[1], c.Password) {
+				bytes.Equal(pair[0], c.Name) &&
+				bytes.Equal(pair[1], c.Password) {
 					h(w, r, ps)
+
+					core.Themes.Result["login"] = true
+
 					return
 				}
 			}
 		}
+
+		core.Themes.Result["login"] = false
+
 		w.Header().Set("WWW-Authenticate", "Basic realm=Restricted")
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 	}

@@ -19,8 +19,11 @@ func (pc *PageController) GetList(w http.ResponseWriter, r *http.Request, _ http
 		http.Error(w, http.StatusText(500), 500)
 	}
 
+	core.Themes.Result["data"] = res
+	core.Themes.Result["meta"] = map[string]string{"title": "All page"}
+
 	core.Themes.Reload()
-	err = core.Theme.ExecuteTemplate(w, "pageList", res)
+	err = core.Theme.ExecuteTemplate(w, "pageList", core.Themes.Result)
 	if err != nil {
 		log.Error(err.Error())
 		return
@@ -36,8 +39,11 @@ func (pc *PageController) GetByAlias(w http.ResponseWriter, r *http.Request, ps 
 		return
 	}
 
+	core.Themes.Result["data"] = res
+	core.Themes.Result["meta"] = map[string]string{"title": res.Name}
+
 	core.Themes.Reload()
-	err = core.Theme.ExecuteTemplate(w, "page", res)
+	err = core.Theme.ExecuteTemplate(w, "page", core.Themes.Result)
 	if err != nil {
 		log.Error(err.Error())
 		return

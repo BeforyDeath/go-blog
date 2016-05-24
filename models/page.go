@@ -18,7 +18,7 @@ type Pages struct {
 }
 
 func (pm *Pages) GetList() ([]*Page, error) {
-	rows, err := db.Query("SELECT id, name, alias, preview, created_at FROM element WHERE visible=? ORDER BY id DESC", 1)
+	rows, err := db.Query("SELECT id, name, alias, preview, created_at FROM element ORDER BY id DESC")
 	if err != nil {
 		return nil, err
 	}
@@ -43,7 +43,7 @@ func (pm *Pages) GetList() ([]*Page, error) {
 
 func (pm *Pages) GetByAlias(alias string) (*Page, error) {
 	var p Page
-	err := db.QueryRow("SELECT id, name, alias, description, created_at FROM element WHERE alias=? AND visible=?", alias, true).Scan(
+	err := db.QueryRow("SELECT id, name, alias, description, created_at FROM element WHERE alias=?", alias).Scan(
 		&p.Id, &p.Name, &p.Alias, &p.Description, &p.Created_at)
 	if err != nil {
 		return nil, err

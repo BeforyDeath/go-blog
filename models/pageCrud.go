@@ -18,30 +18,6 @@ func (pm *Pages) Validate(p *Page) error {
 	return nil
 }
 
-func (pm *Pages) GetListAll() ([]*Page, error) {
-	rows, err := db.Query("SELECT id, name, alias, preview, created_at FROM element ORDER BY id DESC")
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	result := make([]*Page, 0)
-
-	for rows.Next() {
-		e := new(Page)
-		err := rows.Scan(&e.Id, &e.Name, &e.Alias, &e.Preview, &e.Created_at)
-		if err != nil {
-			return nil, err
-		}
-		result = append(result, e)
-	}
-
-	if err = rows.Err(); err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
 func (pm *Pages) GetById(id int) (*Page, error) {
 	var p Page
 	err := db.QueryRow("SELECT id, name, alias, description, visible, created_at FROM element WHERE id=?", id).Scan(
@@ -76,4 +52,17 @@ func (pm *Pages) Create(p *Page) (int64, error) {
 	}
 
 	return id, nil
+}
+
+func (pm *Pages) Delete(id int) (row int64, err error) {
+	res, err := db.Exec("DELETE FROM element WHERE id=?", id)
+	row, err = res.RowsAffected()
+	return
+}
+
+func (pm *Pages) Update(p *Page) (row int64, err error) {
+	res, err := db.Exec("UPDATE element SET name=?, alias=?, preview=?, description=?, visible=? WHERE id=?",
+		p.Name, p.Alias, p.Preview, p.Description, p.Visible, p.Id)
+	row, err = res.RowsAffected()
+	return
 }

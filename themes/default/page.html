@@ -1,52 +1,36 @@
 {{ define "pageList" }}
-{{ template "header" }}
-
-{{ range . }}
+{{ template "header" .meta }}
+{{ if $.login }}
+    <a class="btn btn-primary btn-xs" href="/admin/page/create">Create new</a>
+{{ end }}
+{{ range .data }}
 <div class="post">
     <h3><a href="/page/{{ .Alias }}">{{ .Name }}</a></h3>
     <div class="created_at">{{ .Created_at | formatTime }}</div>
+    {{ if $.login }}
+    <p>
+        <a class="btn btn-primary btn-xs" href="/admin/page/update/{{ .Id }}">Edit</a>
+        <a class="btn btn-danger btn-xs" href="/admin/page/delete/{{ .Id }}">X</a>
+    </p>
+    {{ end }}
     <div class="preview">{{ .Preview | markdown }}</div>
+    <div class="tags">Tags:</div>
 </div>
 {{ end }}
-
 {{ template "footer" }}
 {{ end }}
 
 {{ define "page" }}
-{{ template "header" }}
-<h1>{{ .Name }}</h1>
-<div class="created_at">{{ .Created_at | formatTime }}</div>
-<div class="description">{{ .Description | replace "{preview}" | markdown }}</div>
-{{ template "footer" }}
+{{ template "header" .meta }}
+<h1>{{ .data.Name }}</h1>
+<div class="created_at">{{ .data.Created_at | formatTime }}</div>
+{{ if $.login }}
+<p>
+    <a class="btn btn-primary btn-xs" href="/admin/page/update/{{ .data.Id }}">Edit</a>
+    <a class="btn btn-danger btn-xs" href="/admin/page/delete/{{ .data.Id }}">X</a>
+</p>
 {{ end }}
-
-{{ define "pageForm" }}
-{{ template "header" }}
-<div class="col-lg-6">
-    <form id="page">
-        <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" class="form-control" id="name" name="name" value="{{ .Name }}" required>
-        </div>
-        <div class="form-group">
-            <label for="alias">Alias</label>
-            <input type="text" class="form-control" id="alias" name="alias" value="{{ .Alias }}" required>
-        </div>
-        <div class="form-group">
-            <label for="description">Description</label>
-            <textarea class="form-control" rows="4" id="description" name="description">{{ .Description }}</textarea>
-        </div>
-        <div class="form-group">
-            <label for="visible"></label>
-            <input type="checkbox" id="visible" name="visible" {{ if .Visible }} checked{{ end }}> Visible
-        </div>
-        <div class="error"></div>
-
-        <div class="form-group">
-            <input type="hidden" class="form-control" id="id" name="id" value="{{ .Id }}">
-            <button class="btn btn-default" id="submit">{{ if .Id }}Update{{else}}Create{{ end }}</button>
-        </div>
-    </form>
-</div>
+<div class="tags">Tags:</div>
+<div class="description">{{ .data.Description | replace "{preview}" | markdown }}</div>
 {{ template "footer" }}
 {{ end }}

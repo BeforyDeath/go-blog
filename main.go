@@ -24,23 +24,25 @@ func main() {
 	models.ConnectDB()
 	defer models.CloseDB()
 
-	controller := controllers.Controller{}
+	c := new(controllers.Controller)
 
-	controller.User.Name = []byte("admin")
-	controller.User.Password = []byte("password")
+	c.User.Name = []byte("admin")
+	c.User.Password = []byte("admin")
 
 	router := httprouter.New()
 
-	router.ServeFiles("/vendor/*filepath", http.FileSystem(http.Dir(core.Config.BasePath+"/themes/assets/vendors/")))
-	router.ServeFiles("/assets/*filepath", http.FileSystem(http.Dir(core.Config.ThemePath+"/assets/")))
+	router.ServeFiles("/vendor/*filepath", http.FileSystem(http.Dir(core.Config.BasePath + "/themes/assets/vendors/")))
+	router.ServeFiles("/assets/*filepath", http.FileSystem(http.Dir(core.Config.ThemePath + "/assets/")))
 
-	router.GET("/", controller.Page.GetList)
-	router.GET("/page/:alias", controller.Page.GetByAlias)
+	router.GET("/", c.Page.GetList)
+	router.GET("/page/:alias", c.Page.GetByAlias)
 
-	router.GET("/admin/page/create", controller.Page.Create)
-	router.POST("/admin/page/create", controller.Page.Create)
-	router.GET("/admin/page/update/:id", controller.Page.Update)
-	router.POST("/admin/page/update/:id", controller.Page.Update)
+	router.GET("/login", c.User.BasicAuth(c.Page.GetList))
+	router.GET("/admin/page/create", c.User.BasicAuth(c.Page.Create))
+	router.GET("/admin/page/update/:id", c.User.BasicAuth(c.Page.Update))
+	router.POST("/admin/page/create", c.User.BasicAuth(c.Page.Create))
+	router.POST("/admin/page/update/:id", c.User.BasicAuth(c.Page.Update))
+	router.GET("/admin/page/delete/:id", c.User.BasicAuth(c.Page.Delete))
 
 	log.Info("Server started ...")
 	log.Fatal(http.ListenAndServe(":8085", router))
