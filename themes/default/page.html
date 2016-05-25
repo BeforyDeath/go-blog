@@ -1,18 +1,11 @@
 {{ define "pageList" }}
 {{ template "header" .meta }}
-{{ if $.login }}
-    <a class="btn btn-primary btn-xs" href="/admin/page/create">Create new</a>
-{{ end }}
+{{ if $.login }}<a class="btn btn-primary btn-xs" href="/admin/page/create">Create new</a>{{ end }}
 {{ range .data }}
 <div class="post">
     <h3><a href="/page/{{ .Alias }}">{{ .Name }}</a></h3>
     <div class="created_at">{{ .Created_at | formatTime }}</div>
-    {{ if $.login }}
-    <p>
-        <a class="btn btn-primary btn-xs" href="/admin/page/update/{{ .Id }}">Edit</a>
-        <a class="btn btn-danger btn-xs" href="/admin/page/delete/{{ .Id }}">X</a>
-    </p>
-    {{ end }}
+    {{ if $.login }}{{ template "admin-btn" .Id }}{{ end }}
     <div class="preview">{{ .Preview | markdown }}</div>
     <div class="tags">Tags:</div>
 </div>
@@ -24,12 +17,7 @@
 {{ template "header" .meta }}
 <h1>{{ .data.Name }}</h1>
 <div class="created_at">{{ .data.Created_at | formatTime }}</div>
-{{ if $.login }}
-<p>
-    <a class="btn btn-primary btn-xs" href="/admin/page/update/{{ .data.Id }}">Edit</a>
-    <a class="btn btn-danger btn-xs" href="/admin/page/delete/{{ .data.Id }}">X</a>
-</p>
-{{ end }}
+{{ if $.login }}{{ template "admin-btn" .data.Id }}{{ end }}
 <div class="tags">Tags:</div>
 <div class="description">{{ .data.Description | replace "{preview}" | markdown }}</div>
 {{ template "footer" }}

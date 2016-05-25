@@ -3,6 +3,7 @@ package models
 import (
 	"errors"
 	"github.com/beforydeath/go-blog/core"
+	"regexp"
 )
 
 func (pm *Pages) Validate(p *Page) error {
@@ -13,8 +14,17 @@ func (pm *Pages) Validate(p *Page) error {
 		return errors.New("Field `Alias` required")
 	}
 	if len(p.Description) < 20 {
-		return errors.New("Field `Description` small")
+		return errors.New("Field `Description` > 20 characters")
 	}
+
+	re := regexp.MustCompile("<(.*)script(.*)>")
+	p.Description = re.ReplaceAllString(p.Description, "<#script#>")
+
+	match, _ := regexp.MatchString("^[a-zA-Z0-9-_]+$", p.Alias)
+	if match == false {
+		return errors.New("Field `Alias` error")
+	}
+
 	return nil
 }
 
@@ -37,7 +47,7 @@ func (pm *Pages) Create(p *Page) (int64, error) {
 
 	p.Preview, err = core.SplitPreview(p.Description)
 	if err != nil {
-		return 0, err
+		//return 0, err
 	}
 
 	res, err := db.Exec("INSERT INTO element (name, alias, preview, description, visible, created_at) VALUES (?, ?, ?, ?, ?, ?)",
@@ -56,11 +66,25 @@ func (pm *Pages) Create(p *Page) (int64, error) {
 
 func (pm *Pages) Delete(id int) (row int64, err error) {
 	res, err := db.Exec("DELETE FROM element WHERE id=?", id)
+	if err != nil {
+		return 0, err
+	}
+
 	row, err = res.RowsAffected()
 	return
 }
 
 func (pm *Pages) Update(p *Page) (row int64, err error) {
+	err = pm.Validate(p)
+	if err != nil {
+		return 0, err
+	}
+
+	p.Preview, err = core.SplitPreview(p.Description)
+	if err != nil {
+		//return 0, err
+	}
+
 	res, err := db.Exec("UPDATE element SET name=?, alias=?, preview=?, description=?, visible=? WHERE id=?",
 		p.Name, p.Alias, p.Preview, p.Description, p.Visible, p.Id)
 	row, err = res.RowsAffected()

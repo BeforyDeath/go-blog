@@ -41,9 +41,10 @@ func main() {
 	router.GET("/admin/page/create", c.User.BasicAuth(c.Page.Create))
 	router.GET("/admin/page/update/:id", c.User.BasicAuth(c.Page.Update))
 	router.POST("/admin/page/create", c.User.BasicAuth(c.Page.Create))
-	router.POST("/admin/page/update/:id", c.User.BasicAuth(c.Page.Update))
-	router.GET("/admin/page/delete/:id", c.User.BasicAuth(c.Page.Delete))
+	router.POST("/admin/page/update", c.User.BasicAuth(c.Page.Update))
+	router.POST("/admin/page/delete", c.User.BasicAuth(c.Page.Delete))
+	router.POST("/admin/md", c.Markdown)
 
-	log.Info("Server started ...")
-	log.Fatal(http.ListenAndServe(":8085", router))
+	log.Infof("Server started %s ...", core.Config.Listen)
+	log.Fatal(http.ListenAndServe(core.Config.Listen, router))
 }

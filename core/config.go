@@ -17,6 +17,7 @@ type config struct {
 	AdminThemePath string
 	Logger         Logger
 	DataBase       Database
+	Listen         string
 }
 
 type Logger struct {
@@ -42,12 +43,16 @@ func (c *config) Init() {
 		log.Fatal(err)
 	}
 
+	if Config.Listen == "" {
+		Config.Listen = ":8085"
+	}
+
 	cwd, _ := os.Getwd()
 	if Config.BasePath != "" {
 		cwd = Config.BasePath
 	} else {
 		Config.BasePath = cwd
 	}
-	c.ThemePath = filepath.Join(cwd, "/themes/"+Config.Theme)
+	c.ThemePath = filepath.Join(cwd, "/themes/" + Config.Theme)
 	c.AdminThemePath = filepath.Join(cwd, "/themes/admin")
 }

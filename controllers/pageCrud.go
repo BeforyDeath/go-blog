@@ -14,26 +14,6 @@ import (
 
 var decoder = schema.NewDecoder()
 
-func (pc *PageController) Delete(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	id, err := strconv.Atoi(ps.ByName("id"))
-	if err != nil {
-		w.WriteHeader(400)
-		fmt.Fprint(w, err.Error())
-		return
-	}
-
-	model := models.Pages{}
-	res, err := model.Delete(id)
-	if err != nil {
-		w.WriteHeader(400)
-		fmt.Fprint(w, err.Error())
-		return
-	}
-
-	w.WriteHeader(200)
-	fmt.Fprint(w, res)
-}
-
 func (pc *PageController) Create(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	page := new(models.Page)
 
@@ -115,4 +95,24 @@ func (pc *PageController) Update(w http.ResponseWriter, r *http.Request, ps http
 		log.Error(err.Error())
 		return
 	}
+}
+
+func (pc *PageController) Delete(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	id, err := strconv.Atoi(r.PostFormValue("id"))
+	if err != nil {
+		w.WriteHeader(400)
+		fmt.Fprint(w, err.Error())
+		return
+	}
+
+	model := models.Pages{}
+	res, err := model.Delete(id)
+	if err != nil {
+		w.WriteHeader(400)
+		fmt.Fprint(w, err.Error())
+		return
+	}
+
+	w.WriteHeader(200)
+	fmt.Fprint(w, res)
 }

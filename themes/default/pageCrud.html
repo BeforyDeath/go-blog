@@ -12,7 +12,8 @@
         </div>
         <div class="form-group">
             <label for="description">Description</label>
-            <textarea class="form-control" rows="4" id="description" name="description">{{ .Description }}</textarea>
+            <textarea class="form-control" rows="20" id="description" name="description"
+                      placeholder="Preview {preview} Description">{{ .Description }}</textarea>
         </div>
         <div class="form-group">
             <label for="visible"></label>
@@ -26,5 +27,14 @@
         </div>
     </form>
 </div>
+<div class="col-lg-6" id="md">
+</div>
 {{ template "footer" }}
+{{ end }}
+
+{{ define "admin-btn" }}
+<p>
+    <a class="btn btn-primary btn-xs" href="/admin/page/update/{{ . }}">Edit</a>
+    <button onclick="deletePage({{ . }})" class="btn btn-danger btn-xs" href="/admin/page/delete/{{ . }}">X</button>
+</p>
 {{ end }}

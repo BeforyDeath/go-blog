@@ -3,10 +3,10 @@ package controllers
 import (
 	"bytes"
 	"encoding/base64"
+	"github.com/beforydeath/go-blog/core"
 	"github.com/julienschmidt/httprouter"
 	"net/http"
 	"strings"
-	"github.com/beforydeath/go-blog/core"
 )
 
 type UserController struct {
