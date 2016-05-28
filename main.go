@@ -37,7 +37,7 @@ func main() {
 	router.GET("/", c.Page.GetList)
 	router.GET("/page/:alias", c.Page.GetByAlias)
 
-	router.GET("/login", c.User.BasicAuth(c.Page.GetList))
+	router.GET("/login", c.User.BasicAuth(c.User.Login))
 	router.GET("/admin/page/create", c.User.BasicAuth(c.Page.Create))
 	router.GET("/admin/page/update/:id", c.User.BasicAuth(c.Page.Update))
 	router.POST("/admin/page/create", c.User.BasicAuth(c.Page.Create))

@@ -14,6 +14,10 @@ type UserController struct {
 	Password []byte
 }
 
+func (pc *UserController) Login(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	http.Redirect(w, r, "/", 301)
+}
+
 func (c *UserController) BasicAuth(h httprouter.Handle) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		const basicAuthPrefix string = "Basic "
