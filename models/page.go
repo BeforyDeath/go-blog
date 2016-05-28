@@ -1,8 +1,6 @@
 package models
 
 import (
-	"fmt"
-	"github.com/BeforyDeath/pagination"
 	"time"
 )
 
@@ -17,36 +15,26 @@ type Page struct {
 }
 
 type Pages struct {
-	Pagination *pagination.Pagination
 }
 
-func (pm *Pages) GetTotal() (err error) {
-	if pm.Pagination == nil {
-		pm.Pagination = pagination.Create(0, 1, 5)
-
-		fmt.Println("init pagination")
-
-		rows, err := db.Query("SELECT count(*) as count FROM page")
-		if err != nil {
-			return err
-		}
-		defer rows.Close()
-
-		var count int
-		for rows.Next() {
-			err := rows.Scan(&count)
-			if err != nil {
-				return err
-			}
-		}
-		pm.Pagination.SetTotal(count)
-		return nil
+func (pm *Pages) GetTotal() (count int, err error) {
+	rows, err := db.Query("SELECT count(*) as count FROM page")
+	if err != nil {
+		return
 	}
-	return nil
+	defer rows.Close()
+
+	for rows.Next() {
+		err = rows.Scan(&count)
+		if err != nil {
+			return
+		}
+	}
+	return
 }
 
-func (pm *Pages) GetList() ([]*Page, error) {
-	rows, err := db.Query("SELECT id, name, alias, preview, created_at FROM page ORDER BY id DESC")
+func (pm *Pages) GetList(offset, limit int) ([]*Page, error) {
+	rows, err := db.Query("SELECT id, name, alias, preview, created_at FROM page ORDER BY id DESC LIMIT ?, ?", offset, limit)
 	if err != nil {
 		return nil, err
 	}
