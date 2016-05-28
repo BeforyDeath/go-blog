@@ -12,7 +12,7 @@ func (l *Logger) Init() {
 }
 
 func (l *Logger) File() (file *os.File) {
-	logFile, err := os.OpenFile("core.log", os.O_CREATE | os.O_RDWR, 0666) //os.O_APPEND |
+	logFile, err := os.OpenFile("core.log", os.O_CREATE|os.O_RDWR, 0666) //os.O_APPEND |
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
 	}

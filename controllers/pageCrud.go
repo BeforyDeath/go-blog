@@ -2,9 +2,9 @@ package controllers
 
 import (
 	"fmt"
+	"github.com/BeforyDeath/go-blog/core"
+	"github.com/BeforyDeath/go-blog/models"
 	log "github.com/Sirupsen/logrus"
-	"github.com/beforydeath/go-blog/core"
-	"github.com/beforydeath/go-blog/models"
 	"github.com/gorilla/schema"
 	"github.com/julienschmidt/httprouter"
 	"net/http"

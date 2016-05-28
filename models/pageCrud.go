@@ -2,7 +2,7 @@ package models
 
 import (
 	"errors"
-	"github.com/beforydeath/go-blog/core"
+	"github.com/BeforyDeath/go-blog/core"
 	"regexp"
 )
 
@@ -30,7 +30,7 @@ func (pm *Pages) Validate(p *Page) error {
 
 func (pm *Pages) GetById(id int) (*Page, error) {
 	var p Page
-	err := db.QueryRow("SELECT id, name, alias, description, visible, created_at FROM element WHERE id=?", id).Scan(
+	err := db.QueryRow("SELECT id, name, alias, description, visible, created_at FROM page WHERE id=?", id).Scan(
 		&p.Id, &p.Name, &p.Alias, &p.Description, &p.Visible, &p.Created_at)
 	if err != nil {
 		return nil, err
@@ -50,7 +50,7 @@ func (pm *Pages) Create(p *Page) (int64, error) {
 		//return 0, err
 	}
 
-	res, err := db.Exec("INSERT INTO element (name, alias, preview, description, visible, created_at) VALUES (?, ?, ?, ?, ?, ?)",
+	res, err := db.Exec("INSERT INTO page (name, alias, preview, description, visible, created_at) VALUES (?, ?, ?, ?, ?, ?)",
 		p.Name, p.Alias, p.Preview, p.Description, p.Visible, p.Created_at)
 	if err != nil {
 		return 0, err
@@ -65,7 +65,7 @@ func (pm *Pages) Create(p *Page) (int64, error) {
 }
 
 func (pm *Pages) Delete(id int) (row int64, err error) {
-	res, err := db.Exec("DELETE FROM element WHERE id=?", id)
+	res, err := db.Exec("DELETE FROM page WHERE id=?", id)
 	if err != nil {
 		return 0, err
 	}
@@ -85,7 +85,7 @@ func (pm *Pages) Update(p *Page) (row int64, err error) {
 		//return 0, err
 	}
 
-	res, err := db.Exec("UPDATE element SET name=?, alias=?, preview=?, description=?, visible=? WHERE id=?",
+	res, err := db.Exec("UPDATE page SET name=?, alias=?, preview=?, description=?, visible=? WHERE id=?",
 		p.Name, p.Alias, p.Preview, p.Description, p.Visible, p.Id)
 	row, err = res.RowsAffected()
 	return

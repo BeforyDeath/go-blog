@@ -10,6 +10,36 @@
     <div class="tags">Tags:</div>
 </div>
 {{ end }}
+
+{{ .pages.First }}
+{{ .pages.Prev }}
+{{ .pages.Active }}
+{{ .pages.Next }}
+{{ .pages.Last }}
+
+<nav>
+    <ul class="pagination">
+        {{ if .pages.First }}
+        <li><a href="{{ .pages.First }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+        {{ end }}
+        {{ if .pages.Prev }}
+        <li><a href="{{ .pages.Prev }}" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span></a></li>
+        {{ end }}
+
+        {{ range .pages.Page }}
+        <li {{ if eq . $.pages.Active }} class="active" {{ end }}><a href="{{ . }}">{{ . }}</a></li>
+        {{ end }}
+
+        {{ if .pages.Next }}
+        <li><a href="{{ .pages.Next }}" aria-label="Next"><span aria-hidden="true">&rsaquo;</span></a></li>
+        {{ end }}
+        {{ if .pages.Last }}
+        <li><a href="{{ .pages.Last }}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+        {{ end }}
+    </ul>
+</nav>
+
+
 {{ template "footer" }}
 {{ end }}
 

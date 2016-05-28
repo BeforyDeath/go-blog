@@ -3,7 +3,7 @@ package controllers
 import (
 	"bytes"
 	"encoding/base64"
-	"github.com/beforydeath/go-blog/core"
+	"github.com/BeforyDeath/go-blog/core"
 	"github.com/julienschmidt/httprouter"
 	"net/http"
 	"strings"
@@ -23,8 +23,8 @@ func (c *UserController) BasicAuth(h httprouter.Handle) httprouter.Handle {
 			if err == nil {
 				pair := bytes.SplitN(payload, []byte(":"), 2)
 				if len(pair) == 2 &&
-				bytes.Equal(pair[0], c.Name) &&
-				bytes.Equal(pair[1], c.Password) {
+					bytes.Equal(pair[0], c.Name) &&
+					bytes.Equal(pair[1], c.Password) {
 					h(w, r, ps)
 
 					core.Themes.Result["login"] = true

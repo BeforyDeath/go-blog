@@ -6,9 +6,9 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"net/http"
 
-	"github.com/beforydeath/go-blog/controllers"
-	"github.com/beforydeath/go-blog/core"
-	"github.com/beforydeath/go-blog/models"
+	"github.com/BeforyDeath/go-blog/controllers"
+	"github.com/BeforyDeath/go-blog/core"
+	"github.com/BeforyDeath/go-blog/models"
 )
 
 func main() {
@@ -31,8 +31,8 @@ func main() {
 
 	router := httprouter.New()
 
-	router.ServeFiles("/vendor/*filepath", http.FileSystem(http.Dir(core.Config.BasePath + "/themes/assets/vendors/")))
-	router.ServeFiles("/assets/*filepath", http.FileSystem(http.Dir(core.Config.ThemePath + "/assets/")))
+	router.ServeFiles("/vendor/*filepath", http.FileSystem(http.Dir(core.Config.BasePath+"/themes/assets/vendors/")))
+	router.ServeFiles("/assets/*filepath", http.FileSystem(http.Dir(core.Config.ThemePath+"/assets/")))
 
 	router.GET("/", c.Page.GetList)
 	router.GET("/page/:alias", c.Page.GetByAlias)

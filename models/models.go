@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	log "github.com/Sirupsen/logrus"
 
-	"github.com/beforydeath/go-blog/core"
+	"github.com/BeforyDeath/go-blog/core"
 	_ "github.com/go-sql-driver/mysql"
 )
 

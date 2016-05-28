@@ -1,9 +1,9 @@
 package controllers
 
 import (
+	"github.com/BeforyDeath/go-blog/core"
+	"github.com/BeforyDeath/go-blog/models"
 	log "github.com/Sirupsen/logrus"
-	"github.com/beforydeath/go-blog/core"
-	"github.com/beforydeath/go-blog/models"
 	"github.com/julienschmidt/httprouter"
 	"net/http"
 )
@@ -13,6 +13,15 @@ type PageController struct {
 
 func (pc *PageController) GetList(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	model := models.Pages{}
+
+	err := model.GetTotal()
+	if err != nil {
+		log.Error(err.Error())
+		http.Error(w, http.StatusText(500), 500)
+	}
+
+	model.Pagination.Get(1)
+
 	res, err := model.GetList()
 	if err != nil {
 		log.Error(err.Error())
@@ -20,6 +29,7 @@ func (pc *PageController) GetList(w http.ResponseWriter, r *http.Request, _ http
 	}
 
 	core.Themes.Result["data"] = res
+	core.Themes.Result["pages"] = model.Pagination.Pages
 	core.Themes.Result["meta"] = map[string]string{"title": "All page"}
 
 	core.Themes.Reload()
