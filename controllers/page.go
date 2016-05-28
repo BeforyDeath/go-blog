@@ -19,7 +19,7 @@ func (pc *PageController) InitPagination(p int) error {
 
 		log.Info("Initial Pagination PageController")
 
-		pc.Pagination = pagination.Create(0, 2, 3)
+		pc.Pagination = pagination.Create(0, core.Config.PageLimit, core.Config.VisibleRange)
 
 		model := models.Pages{}
 		count, err := model.GetTotal()

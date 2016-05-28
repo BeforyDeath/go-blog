@@ -18,6 +18,8 @@ type config struct {
 	Logger         Logger
 	DataBase       Database
 	Listen         string
+	PageLimit      int
+	VisibleRange   int
 }
 
 type Logger struct {
@@ -53,6 +55,6 @@ func (c *config) Init() {
 	} else {
 		Config.BasePath = cwd
 	}
-	c.ThemePath = filepath.Join(cwd, "/themes/"+Config.Theme)
+	c.ThemePath = filepath.Join(cwd, "/themes/" + Config.Theme)
 	c.AdminThemePath = filepath.Join(cwd, "/themes/admin")
 }

@@ -1,22 +1,6 @@
 {{ define "pageList" }}
 {{ template "header" .meta }}
 {{ if $.login }}<a class="btn btn-primary btn-xs" href="/admin/page/create">Create new</a>{{ end }}
-{{ range .data }}
-<div class="post">
-    <h3><a href="/page/{{ .Alias }}">{{ .Name }}</a></h3>
-    <div class="created_at">{{ .Created_at | formatTime }}</div>
-    {{ if $.login }}{{ template "admin-btn" .Id }}{{ end }}
-    <div class="preview">{{ .Preview | markdown }}</div>
-    <div class="tags">Tags:</div>
-</div>
-{{ end }}
-
-{{ .pages.First }}
-{{ .pages.Prev }}
-{{ .pages.Active }}
-{{ .pages.Next }}
-{{ .pages.Last }}
-
 <nav>
     <ul class="pagination">
         {{ if .pages.First }}
@@ -38,8 +22,36 @@
         {{ end }}
     </ul>
 </nav>
+{{ range .data }}
+<div class="post">
+    <h3><a href="/page/{{ .Alias }}">{{ .Name }}</a></h3>
+    <div class="created_at">{{ .Created_at | formatTime }}</div>
+    {{ if $.login }}{{ template "admin-btn" .Id }}{{ end }}
+    <div class="preview">{{ .Preview | markdown }}</div>
+    <div class="tags">Tags:</div>
+</div>
+{{ end }}
+<nav>
+    <ul class="pagination">
+        {{ if .pages.First }}
+        <li><a href="?p={{ .pages.First }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+        {{ end }}
+        {{ if .pages.Prev }}
+        <li><a href="?p={{ .pages.Prev }}" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span></a></li>
+        {{ end }}
 
+        {{ range .pages.Page }}
+        <li {{ if eq . $.pages.Active }} class="active" {{ end }}><a href="?p={{ . }}">{{ . }}</a></li>
+        {{ end }}
 
+        {{ if .pages.Next }}
+        <li><a href="?p={{ .pages.Next }}" aria-label="Next"><span aria-hidden="true">&rsaquo;</span></a></li>
+        {{ end }}
+        {{ if .pages.Last }}
+        <li><a href="?p={{ .pages.Last }}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+        {{ end }}
+    </ul>
+</nav>
 {{ template "footer" }}
 {{ end }}
 
