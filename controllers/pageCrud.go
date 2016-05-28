@@ -36,6 +36,7 @@ func (pc *PageController) Create(w http.ResponseWriter, r *http.Request, _ httpr
 			return
 		}
 
+		pc.Pagination.SetTotal(pc.Pagination.Total + 1)
 		w.WriteHeader(201)
 		fmt.Fprint(w, page.Alias)
 		return
@@ -113,6 +114,7 @@ func (pc *PageController) Delete(w http.ResponseWriter, r *http.Request, _ httpr
 		return
 	}
 
+	pc.Pagination.SetTotal(pc.Pagination.Total - 1)
 	w.WriteHeader(200)
 	fmt.Fprint(w, res)
 }
